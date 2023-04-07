@@ -2,11 +2,24 @@ import numpy as np
 import util as ut
 
 row_pivoting = True
+print_iterations = True
 
-def gaussian_elimination(matrix: np.ndarray):
+# SISTEMA TESTE x = (1, 2, 3)
+A = np.array([[1, 1, 1], [2, 3, 4], [1, -1, 2]], dtype=np.float64)
+b = np.array([6, 20, 5], dtype=np.float64)
 
-    print('Original matrix')
-    print(matrix)
+# Let A.x = b; if you consider x0 to be a solution of this LS, then the residual vector is how much A.x0 deviates from b.
+def calculate_residual_vector(a: np.ndarray, x0: np.ndarray, b: np.ndarray):
+    p = np.matmul(a, x0)
+    rv = p - b;
+    return rv
+
+# Performs gaussian elimination on 'matrix'
+def gaussian_eliminate(matrix: np.ndarray):
+
+    if print_iterations:
+        print('Original matrix:')
+        print(matrix)
 
     SIZE = matrix.shape[0]
 
@@ -24,60 +37,23 @@ def gaussian_elimination(matrix: np.ndarray):
         matrix[row] /= matrix[row, row]
 
         # Nulifying elements below the pivot
-        for nulifying_row in range(row + 1, SIZE):
-            matrix[nulifying_row] -= matrix[nulifying_row, row] * matrix[row]
+        for row_ahead in range(row + 1, SIZE):
+            matrix[row_ahead] -= matrix[row_ahead, row] * matrix[row]
 
-        print('Iteration', row + 1)
-        print(matrix)
+        if print_iterations:
+            print('Iteration:', row + 1)
+            print(matrix)
 
+# Returns a gaussian-eliminated copy of 'matrix'
+# The argument isn't modified
+def gaussian_elimination(matrix: np.ndarray):
+    mat = matrix.copy()
+    gaussian_eliminate(mat)
+    return mat
 
-def gaussian_elimination_with_lp(matrix: np.ndarray):
-
-    print('Original matrix')
-    print(matrix)
-
-    p_swaps = 0
-
-    SIZE = matrix.shape[0]
-    matrix_P = ut.identity_matrix(SIZE)
-    matrix_L = ut.identity_matrix(SIZE)
-
-    for iteration in range(SIZE):
-
-        multiplier = 1.0
-
-        # Pivoting process
-        if row_pivoting:
-
-            leader_row_index = iteration + ut.abs_max_index(matrix[iteration:, iteration])
-
-            temp = matrix[leader_row_index].copy()
-            matrix[leader_row_index] = matrix[iteration]
-            matrix[iteration] = temp
-
-            temp = matrix_P[leader_row_index].copy()
-            matrix_P[leader_row_index] = matrix_P[iteration]
-            matrix_P[iteration] = temp
-
-            p_swaps += 1
-
-        # Nulifying elements below the pivot
-        for nulifying_row in range(iteration + 1, SIZE):
-            multiplier = matrix[nulifying_row, iteration] / matrix[iteration, iteration]
-            matrix[nulifying_row] -= multiplier * matrix[iteration]
-            matrix_L[nulifying_row, iteration] = multiplier
-
-        print('Iteration', iteration + 1)
-        print(matrix)
-
-    print('P')
-    print(matrix_P)
-    print('L')
-    print(matrix_L)
-    print('Swaps:', p_swaps)
-
+# Takes a row-reduced matrix by a standard retro-substituting method.
+# Returns a list of solutions
 def find_solutions(ls: np.ndarray):
-    gaussian_elimination(ls)
     SIZE = ls.shape[0]
     solutions = list([])
     for row in range(SIZE - 1, -1, -1):
@@ -86,4 +62,4 @@ def find_solutions(ls: np.ndarray):
             current_solution -= (ls[row, column] * solutions[SIZE - column - 1])
         solutions.append(current_solution)
     solutions.reverse()
-    return solutions
+    return np.array(solutions, dtype=np.float64)

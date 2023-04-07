@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>a9a71b53-27d1-47fd-9406-e6eabfbc8a25</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>gauss_seidel.py</StartupFile>
+    <StartupFile>tests.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,9 +21,12 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="cholesky_decomposition.py" />
     <Compile Include="gaussian_elimination.py" />
     <Compile Include="gauss_seidel.py" />
     <Compile Include="jacobi.py" />
+    <Compile Include="lu_decomposition.py" />
+    <Compile Include="tests.py" />
     <Compile Include="util.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
