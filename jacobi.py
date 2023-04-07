@@ -1,8 +1,8 @@
 import numpy as np
 import util as ut
 
-# a_matrix eh uma matriz quadrada de tamanho SIZE
-# b_vector eh o vetor-coluna de termos independentes de tamanho SIZE
+print_iterations = False
+
 def jacobi_method(a_matrix: np.ndarray, b_vector: np.ndarray):
 
     JACOBI_MAX_ITERATIONS = 50
@@ -17,9 +17,8 @@ def jacobi_method(a_matrix: np.ndarray, b_vector: np.ndarray):
     for i in range(SIZE):
         current_x[i] = b_vector[i] / a_matrix[i, i]
 
-    # Ax = b
-    # Divindo o SL por cada elemento da diagonal principal
-    # Colocar pivotamento?
+
+    # Preparing 'A' e 'b'
     pivot = 1.0
     for i in range(SIZE):
         pivot = a_matrix[i, i]
@@ -46,22 +45,14 @@ def jacobi_method(a_matrix: np.ndarray, b_vector: np.ndarray):
         iterations += 1
 
         # Info
-        print('Iteration', iterations)
-        for i in range(SIZE):
-            print(current_x[i])
-        print('Rel. Difference =', how_different)
-        print('============================')
+        if print_iterations:
+            print('Iteration', iterations)
+            for i in range(SIZE):
+                print(current_x[i])
+            print('Rel. Difference =', how_different)
+            print('============================')
 
         if how_different <= JACOBI_EPSILON:
             enough_accuracy = True
 
-A1 = np.array([[1, 1, 1], [2, 3, 4], [1, -1, 2]], dtype=np.float64)
-b1 = np.array([6, 20, 5], dtype=np.float64)
-
-A2 = np.array([[10, 3, -2], [2, 8, -1], [1, 1, 5]], dtype=np.float64)
-b2 = np.array([57, 20, -4], dtype=np.float64)
-
-A3 = np.array([[10, 2, 1], [1, 5, 1], [2, 3, 10]], dtype=np.float64)
-b3 = np.array([7, -8, 6], dtype=np.float64)
-
-jacobi_method(A3, b3)
+        return current_x
