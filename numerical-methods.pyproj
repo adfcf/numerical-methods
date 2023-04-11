@@ -11,6 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>numerical-methods</Name>
     <RootNamespace>numerical-methods</RootNamespace>
+    <SuppressConfigureTestFrameworkPrompt>true</SuppressConfigureTestFrameworkPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,10 +23,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="cholesky_decomposition.py" />
+    <Compile Include="examples.py" />
     <Compile Include="gaussian_elimination.py" />
     <Compile Include="gauss_seidel.py" />
     <Compile Include="jacobi.py" />
     <Compile Include="lu_decomposition.py" />
+    <Compile Include="power_method.py" />
     <Compile Include="tests.py" />
     <Compile Include="util.py" />
   </ItemGroup>

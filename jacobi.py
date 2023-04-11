@@ -2,28 +2,39 @@ import numpy as np
 import util as ut
 
 print_iterations = False
+initial_guess = 'null'
+swap_rows = 'down'
 
-def jacobi_method(a_matrix: np.ndarray, b_vector: np.ndarray):
+JACOBI_MAX_ITERATIONS = 50
+JACOBI_EPSILON = 0.00001
 
-    JACOBI_MAX_ITERATIONS = 50
-    JACOBI_EPSILON = 0.05
+# LS Size: (N) x (N + 1)
+def jacobi_method(linear_system: np.ndarray):
 
-    SIZE = a_matrix.shape[0]
+    linear_system = linear_system.copy()
+    SIZE = linear_system.shape[0]
+
+    if swap_rows == 'down':
+        ut.main_diagonal_swap_down(linear_system)
+    elif swap_rows == 'top':
+        ut.main_diagonal_swap_top(linear_system)
+
+    a_matrix = linear_system[:, :-1]
+    b_vector = linear_system[:, -1]
 
     current_x = np.zeros(shape=(SIZE,), dtype=np.float64)
     next_x = np.zeros(shape=(SIZE,), dtype=np.float64)
 
-    # Initial guess
+    # Default initial guess
     for i in range(SIZE):
         current_x[i] = b_vector[i] / a_matrix[i, i]
 
+    if type(initial_guess) == np.ndarray:
+        current_x = initial_guess
 
     # Preparing 'A' e 'b'
-    pivot = 1.0
     for i in range(SIZE):
-        pivot = a_matrix[i, i]
-        a_matrix[i] /= pivot
-        b_vector[i] /= pivot
+        linear_system[i] /= a_matrix[i, i]
         a_matrix[i, i] = 0.0
 
     # Stop conditions
@@ -41,7 +52,6 @@ def jacobi_method(a_matrix: np.ndarray, b_vector: np.ndarray):
         how_different = ut.infinity_norm(x_difference) / ut.infinity_norm(next_x)
 
         current_x = next_x.copy()
-
         iterations += 1
 
         # Info
@@ -52,7 +62,6 @@ def jacobi_method(a_matrix: np.ndarray, b_vector: np.ndarray):
             print('Rel. Difference =', how_different)
             print('============================')
 
-        if how_different <= JACOBI_EPSILON:
-            enough_accuracy = True
+        enough_accuracy = how_different <= JACOBI_EPSILON
 
-        return current_x
+    return current_x

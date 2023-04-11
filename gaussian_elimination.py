@@ -2,11 +2,7 @@ import numpy as np
 import util as ut
 
 row_pivoting = True
-print_iterations = True
-
-# SISTEMA TESTE x = (1, 2, 3)
-A = np.array([[1, 1, 1], [2, 3, 4], [1, -1, 2]], dtype=np.float64)
-b = np.array([6, 20, 5], dtype=np.float64)
+print_iterations = False
 
 # Let A.x = b; if you consider x0 to be a solution of this LS, then the residual vector is how much A.x0 deviates from b.
 def calculate_residual_vector(a: np.ndarray, x0: np.ndarray, b: np.ndarray):

@@ -2,13 +2,24 @@ import numpy as np
 import util as ut
 
 print_iterations = False
+initial_guess = 'null'
+swap_rows = 'down'
 
-def gauss_seidel_method(a_matrix: np.ndarray, b_vector: np.ndarray):
+GAUSS_SEIDEL_MAX_ITERATIONS = 50
+GAUSS_SEIDEL_EPSILON = 0.00001
 
-    GAUSS_SEIDEL_MAX_ITERATIONS = 1000
-    GAUSS_SEIDEL_EPSILON = 0.001
+def gauss_seidel_method(linear_system: np.ndarray):
 
-    SIZE = a_matrix.shape[0]
+    linear_system = linear_system.copy()
+    SIZE = linear_system.shape[0]
+
+    if swap_rows == 'down':
+        ut.main_diagonal_swap_down(linear_system)
+    elif swap_rows == 'top':
+        ut.main_diagonal_swap_top(linear_system)
+
+    a_matrix = linear_system[:, :-1]
+    b_vector = linear_system[:, -1]
 
     current_x = np.zeros(shape=(SIZE,), dtype=np.float64)
     inter_x = np.zeros(shape=(SIZE,), dtype=np.float64)
@@ -17,13 +28,12 @@ def gauss_seidel_method(a_matrix: np.ndarray, b_vector: np.ndarray):
     # Initial guess
     for i in range(SIZE):
         current_x[i] = b_vector[i] / a_matrix[i, i]
-        # current_x[i] = 0.0
+        
+    if type(initial_guess) == np.ndarray:
+        current_x = initial_guess
 
-    pivot = 1.0
     for i in range(SIZE):
-        pivot = a_matrix[i, i]
-        a_matrix[i] /= pivot
-        b_vector[i] /= pivot
+        linear_system[i] /= a_matrix[i, i]
         a_matrix[i, i] = 0.0
 
     # Stop conditions
@@ -38,7 +48,6 @@ def gauss_seidel_method(a_matrix: np.ndarray, b_vector: np.ndarray):
         for i in range(SIZE):
             next_x[i] -= np.matmul(a_matrix[i, :].transpose(), inter_x)
             inter_x[i] = next_x[i]
-
 
         # Calculates progress by doing a comparison with the last solution
         x_difference = next_x - current_x
@@ -56,7 +65,6 @@ def gauss_seidel_method(a_matrix: np.ndarray, b_vector: np.ndarray):
             print('Rel. Difference =', how_different)
             print('============================')
 
-        if how_different <= GAUSS_SEIDEL_EPSILON:
-            enough_accuracy = True
+        enough_accuracy = how_different <= GAUSS_SEIDEL_EPSILON
 
     return current_x

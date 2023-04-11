@@ -1,5 +1,6 @@
 import numpy as np
 from math import fabs
+from math import sqrt
 
 # Index of the max (abs) element of 'array'
 def abs_max_index(array: np.ndarray):
@@ -34,10 +35,78 @@ def identity_matrix(n: int):
         identity[i, i] = 1.0;
     return identity
 
+def euclidean_norm(v: np.ndarray):
+    sum = 0.0
+    for i in range(v.size):
+        sum += v[i] * v[i]
+    return sqrt(sum)
+
 # Returns A|b
 def couple_Ab(A: np.ndarray, b: np.ndarray):
     return np.append(A, b.reshape(A.shape[0], 1), axis=1)
 
+# Attempts to make the matrix diagonally dominant by swapping its rows
+def main_diagonal_swap_top(a: np.ndarray):
+    abs_index = 0
+    SIZE = a.shape[0]
+    for i in range(SIZE - 1, 0, -1):
+        abs_index = abs_max_index(a[:i - 1, i])
+        if abs(a[i, i]) < abs(a[abs_index, i]):
+            temp = a[i].copy()
+            a[i] = a[abs_index].copy()
+            a[abs_index] = temp
+
+
+def main_diagonal_swap_down(a: np.ndarray):
+    abs_index = 0
+    SIZE = a.shape[0]
+    for i in range(SIZE - 1):
+        abs_index = i + 1 + abs_max_index(a[i + 1:, i])
+        if abs(a[i, i]) < abs(a[abs_index, i]):
+            temp = a[i].copy()
+            a[i] = a[abs_index].copy()
+            a[abs_index] = temp
+
 # Returns an epsilon from a number 'n' of wanted significant digits.
 def epsilon_from_significant_digits(n):
     return 0.5 * pow(10.0, -n)
+
+def hilbert(i, j):
+    return 1.0 / (i + j + 1.0)
+
+def identity(i, j):
+    return 1.0 if i == j else 0.0
+
+def iterative_test(ls: np.ndarray):
+
+    # next_x = (A + I).current_x - b
+
+    ls = ls.copy()
+
+    MAX = 50
+    EPSILON = 0.0001
+
+    vector_b = ls[:, -1]
+    matrix_a = ls[:, :-1]
+    M = matrix_a + identity_matrix(ls.shape[0])
+
+    current = vector_b.copy()
+    next = vector_b.copy()
+
+    i = 0
+    while i < MAX:
+
+        i += 1
+        next = M @ current
+        next -= vector_b
+
+        diff = next - current;
+        inf_norm = infinity_norm(diff) / infinity_norm(next)
+
+        current = next.copy()
+
+        if inf_norm <= EPSILON:
+            break
+
+    print(current)
+
