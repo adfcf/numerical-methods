@@ -2,6 +2,36 @@ import numpy as np
 from math import fabs
 from math import sqrt
 
+import matplotlib.pyplot as pp
+
+# A set of points and a function
+def plot_samples_fn(samples: np.ndarray, fn):
+
+    x_axis = []
+    f_y_axis = []
+
+    STEP = 0.1
+
+    MIN = samples[:, 0].min()
+    MAX = samples[:, 0].max()
+
+    x = MIN
+    while x <= MAX:
+        x_axis.append(x)
+        f_y_axis.append(fn(x))
+        x += STEP;
+
+    pp.plot(x_axis, f_y_axis)
+    pp.plot(samples[:, 0], samples[:, 1], 'rp')
+
+    pp.show()
+
+def calculate_squares(x, number_of_terms):
+    squares = np.zeros(number_of_terms, dtype=np.float64)
+    for i in range(number_of_terms):
+        squares[i] += pow(x, i)
+    return squares
+
 # Index of the max (abs) element of 'array'
 def abs_max_index(array: np.ndarray):
     max_value = 0.0
@@ -76,6 +106,13 @@ def hilbert(i, j):
 
 def identity(i, j):
     return 1.0 if i == j else 0.0
+
+def diagonal_product(A: np.ndarray):
+    SIZE = A.shape[0]
+    p = 1.0
+    for i in range(SIZE):
+        p *= A[i, i]
+    return p
 
 def iterative_test(ls: np.ndarray):
 
