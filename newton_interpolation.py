@@ -1,5 +1,6 @@
 import numpy as np
 import util as ut
+from math import fabs
 
 def div_difference(samples: np.ndarray, inclusive_start: int, inclusive_end: int):
 
@@ -14,6 +15,12 @@ def div_difference(samples: np.ndarray, inclusive_start: int, inclusive_end: int
 
     return (yb - ya) / (xb - xa)
 
+def estimate_error(samples: np.ndarray, argument: np.float64):
+    dif_product = 1.0
+    for x in samples[:, 0]:
+        dif_product *= (argument - x)
+    dif_product = fabs(dif_product)
+    return dif_product * fabs(div_difference(samples, 0, samples.shape[0] - 1))
 
 def interpolate(samples: np.ndarray, argument: np.float64):
 

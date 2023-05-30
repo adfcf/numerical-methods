@@ -36,3 +36,11 @@ b5 = np.array([57, 20, -4], dtype=np.float64)
 # 6
 # Good for CHOLESKY
 A6 = np.array([[4, -2, 2], [-2, 10, -7], [2, -7, 30]], dtype=np.float64)
+
+# 7
+# Good for LAGRANGE INTERPOLATION
+A7 = np.array([[0.1, 1.221], [0.6, 3.320], [0.8, 4.953]], dtype=np.float64)
+
+# 8
+# Good for DIV DIFFERENCE
+A8 = np.array([[0.0, 3], [0.2, 2.760], [0.3, 2.655], [0.5, 2.625], [0.7, 3.035], [1.0, 5.000]], dtype=np.float64)

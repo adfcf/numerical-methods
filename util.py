@@ -5,25 +5,27 @@ from math import sqrt
 import matplotlib.pyplot as pp
 
 # A set of points and a function
-def plot_samples_fn(samples: np.ndarray, fn):
+def plot_samples_fn(samples: np.ndarray, fn=None):
 
     x_axis = []
     f_y_axis = []
 
-    STEP = 0.1
-
     MIN = samples[:, 0].min()
     MAX = samples[:, 0].max()
+
+    STEP = (MAX - MIN) / 100
 
     x = MIN
     while x <= MAX:
         x_axis.append(x)
-        f_y_axis.append(fn(x))
+        if fn != None:
+            f_y_axis.append(fn(x))
         x += STEP;
 
-    pp.plot(x_axis, f_y_axis)
-    pp.plot(samples[:, 0], samples[:, 1], 'rp')
+    if fn != None:
+        pp.plot(x_axis, f_y_axis)
 
+    pp.plot(samples[:, 0], samples[:, 1], 'rp')
     pp.show()
 
 def calculate_squares(x, number_of_terms):
