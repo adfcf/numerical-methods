@@ -19,10 +19,25 @@ import matplotlib.pyplot as plt
 np.set_printoptions(suppress=True)
 ge.print_iterations = False
 
-samples = np.array([[0, 3], [0.5, 1.8616], [1.0, -0.5571], [1.5, -4.1987], [2.0, -9.0536]])
+# tati
+samples = np.array([[1, 1], [2, 1.25], [3, 1.75], [4, 2.25], [5, 3], [6, 3.15]])
+
+samples2 = np.array([[1.0, 2.0], [2.0, 4.0], [4.0, 1.0], [6.0, 3.0], [7.0, 3.0]])
+
+samples3 = np.array([[-1.0, 0.86199], 
+                     [-0.5, 0.95802], 
+                     [0.0, 1.0986], 
+                     [0.5, 1.29437]])
+
 splin = sp.natural_cubic_spline(samples)
-print(sp.calculate_value(splin[0], 0.25, 0.5))
 
+print(splin)
 
+p0 = sp.to_standard_form(splin[0], 2)
+p1 = sp.to_standard_form(splin[1], 2)
+p2 = sp.to_standard_form(splin[2], 4)
+
+print(sp.calculate_value(splin[0], 1.5, 2))
+print(ut.image_of(p0, 1.5))
 
 

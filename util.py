@@ -34,6 +34,9 @@ def calculate_squares(x, number_of_terms):
         squares[i] += pow(x, i)
     return squares
 
+def image_of(polynomial: np.ndarray, argument):
+    return polynomial @ calculate_squares(argument, polynomial.size)
+
 # Index of the max (abs) element of 'array'
 def abs_max_index(array: np.ndarray):
     max_value = 0.0

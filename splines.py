@@ -3,6 +3,28 @@ import util as ut
 import gaussian_elimination as ge
 from math import fabs
 
+# Converts the format of the cubic spline
+# From: (d, c, b, a) i.e. a(x - k)^3 + b(x - k)^2 + c(x - k) + d
+# To:   (D, C, B, A) i.e. Ax^3 + Bx^2 + Cx + D
+def to_standard_form(spline: np.ndarray, upper_bound: float):
+
+    p = np.zeros(spline.size, dtype=np.float64)
+    
+    a = spline[3]
+    b = spline[2]
+    c = spline[1]
+    d = spline[0]
+    k = upper_bound
+    ks = k * k
+    kc = ks * k
+
+    p[0] = d - (a * kc) + (b * ks) - (c * k)
+    p[1] = (3 * a * ks) - (2 * b * k) + c
+    p[2] = b - (3 * a * k)
+    p[3] = a
+
+    return p
+
 def calculate_value(spline: np.ndarray, argument: float, upper_bound: float):
     value = 0.0
     power = 0
