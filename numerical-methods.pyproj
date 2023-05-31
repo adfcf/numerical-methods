@@ -33,6 +33,7 @@
     <Compile Include="newton_interpolation.py" />
     <Compile Include="polynomial_interpolation.py" />
     <Compile Include="power_method.py" />
+    <Compile Include="splines.py" />
     <Compile Include="tests.py" />
     <Compile Include="util.py" />
   </ItemGroup>
